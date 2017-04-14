@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import '../search-github/search-github.css';
+import axios from 'axios';
 
 class SearchGithub extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      repoName: ''
+      repoName: '',
+      githubData: []
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -26,6 +28,21 @@ class SearchGithub extends Component {
   handleSubmit(event) {
     event.preventDefault();
     console.log(this.state);
+    this.getRepoData();
+  }
+
+  getRepoData() {
+    
+    axios.get(`https://api.github.com/search/repositories?q=${this.state.repoName}`)
+      .then(res => {
+        console.log(res);
+        const data = res.data.items.map(obj => obj);
+        console.log(data);
+
+        this.setState({
+          githubData: data
+        });
+      });
   }
 
   render() {

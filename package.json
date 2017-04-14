@@ -9,6 +9,7 @@
     "react-router-dom": "^4.0.0"
   },
   "devDependencies": {
+    "axios": "^0.16.1",
     "react-scripts": "0.9.5"
   },
   "scripts": {
