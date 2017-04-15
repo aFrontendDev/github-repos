@@ -8,9 +8,7 @@ import {
 
 import SearchGithub from "./Pages/search-github/search-github";
 
-import './styles/normalize.css';
-import './styles/utilities.css';
-import './index.css';
+import './styles/styles.css';
 
 const Root = () => {
     return(

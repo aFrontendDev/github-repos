@@ -1,0 +1,55 @@
+// modal
+
+.modal {
+    position: fixed;
+    top: $vr*3;
+    bottom: $vr*3;
+    left: $ggw*2;
+    right: $ggw*2;
+    padding: $vr*3 $ggw*2;
+    border: 1px solid $brand-black;
+    opacity: 0;
+    transform: scale(0);
+    transition: opacity 300ms, transform 200ms ease-in-out;
+    background-color: $brand-white;
+    overflow: hidden;
+
+    &.modal--in {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.modal__inner {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+}
+
+.modal__close {
+    position: absolute;
+    top: $vr*2;
+    right: $ggw/2;
+    width: 25px;
+    height: 25px;
+    background-color: transparent;
+    padding: 0;
+    border: none;
+    display: inline-block;
+    overflow: hidden;
+    cursor: pointer;
+
+    svg {
+        width: 100%;
+        height: 100%;
+        fill: $brand-black;
+        transition: opacity 250ms, transform 150ms ease-in-out;
+    }
+
+    &:hover svg {
+        opacity: 0.7;
+        transform: scale(0.8) rotate(-25deg);
+    }
+}
+
+
