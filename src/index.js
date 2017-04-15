@@ -12,6 +12,8 @@ import NotFound from "./Pages/404/404";
 import About from "./Pages/about/about";
 import SearchGithub from "./Pages/search-github/search-github";
 
+import './styles/normalize.css';
+import './styles/utilities.css';
 import './index.css';
 
 const Root = () => {

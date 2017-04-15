@@ -10,7 +10,8 @@
   },
   "devDependencies": {
     "axios": "^0.16.1",
-    "react-scripts": "0.9.5"
+    "react-scripts": "0.9.5",
+    "showdown": "^1.6.4"
   },
   "scripts": {
     "start": "react-scripts start",

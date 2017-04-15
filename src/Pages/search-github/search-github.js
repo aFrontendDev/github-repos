@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import '../search-github/search-github.css';
 import axios from 'axios';
+import showdown from 'showdown';
 
 class SearchGithub extends Component {
 
@@ -9,11 +10,14 @@ class SearchGithub extends Component {
     this.state = {
       repoName: '',
       githubData: [],
-      currentReadme: null
+      currentReadme: null,
+      currentRepo: null,
+      modalIn: false
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleCloseModal = this.handleCloseModal.bind(this);
   }
 
   // on input change update state
@@ -37,30 +41,32 @@ class SearchGithub extends Component {
   // use state data to query github api and update state data to update view
   getRepoData() {
     axios
-      .get(`https://api.github.com/search/repositories?q=${this.state.repoName}`)
+      .get(`https://api.github.com/search/repositories?q=${this.state.repoName}+in:name`)
       .then(res => {
         // console.log(res);
         const data = res.data.items;
-        const matchingNames = data.filter(obj => obj.name.indexOf(this.state.repoName) >= 0);
+        // const matchingNames = data.filter(obj => obj.name.indexOf(this.state.repoName) >= 0);
         // console.log(data);
-        console.log(matchingNames);
+        console.log(data);
 
         this.setState({
-          githubData: matchingNames
+          githubData: data
         });
       })
-      .catch(function (error) {
+      .catch((error) => {
         console.log(error);
       });
   }
 
   // get more detail on repo
   viewRepoDetail (repo) {
-    console.log(this);
-    console.log(repo);
+    // console.log(repo);
     console.log(repo.owner.login);
     console.log(repo.name);
-    
+    this.setState({
+      currentRepo: repo
+    });
+
     axios
       .get(`https://api.github.com/repos/${repo.owner.login}/${repo.name}/readme`)
       .then(res => {
@@ -68,8 +74,11 @@ class SearchGithub extends Component {
         const readmeUrl = `https://raw.githubusercontent.com/${repo.owner.login}/${repo.name}/master/README.md`;
         this.getRawReadme(readmeUrl);
       })
-      .catch(function (error) {
+      .catch((error) => {
         console.log(error);
+        this.setState({
+          modalIn: true
+        });
       });
   }
 
@@ -78,16 +87,34 @@ class SearchGithub extends Component {
     axios
       .get(url)
       .then(res => {
-        console.log(res);
-        console.log(res.data);
+
+        // convert markdown to html string
+        const converter = new showdown.Converter();
+        const markdownHtml = converter.makeHtml(res.data);
 
         this.setState({
-          currentReadme: res.data
+          currentReadme: markdownHtml,
+          modalIn: true
         });
       })
-      .catch(function (error) {
+      .catch((error) => {
         console.log(error);
+        this.setState({
+          modalIn: true
+        });
       });
+  }
+
+  // modal close handler
+  handleCloseModal() {
+    this.setState({
+      modalIn: false
+    });
+  }
+
+  // convert html string to html
+  createMarkup() {
+    return {__html: this.state.currentReadme};
   }
 
   render() {
@@ -138,6 +165,39 @@ class SearchGithub extends Component {
               }, this)}
           </div>
         </section>
+
+        <modal className={"modal " + (this.state.modalIn ? 'modal--in' : '')}>
+          <button className="modal__close" onClick={this.handleCloseModal}>
+            <svg xmlns="http://www.w3.org/2000/svg">
+              <path d="M23.954 21.03l-9.184-9.095 9.092-9.174-2.832-2.807-9.09 9.179-9.176-9.088-2.81 2.81 9.186 9.105-9.095 9.184 2.81 2.81 9.112-9.192 9.18 9.1z"/>
+            </svg>
+            <span className="visually-hidden">Close</span>
+          </button>
+          <div className="modal__inner">
+          {
+            this.state.currentRepo ?
+            <div>
+              <h4>{this.state.currentRepo.name}</h4>
+              <a href={this.state.currentRepo.url}>
+                {this.state.currentRepo.url}
+              </a>
+              <ul>
+                <li>{this.state.currentRepo.full_name}</li>
+                <li>{this.state.currentRepo.language}</li>
+                <li>{this.state.currentRepo.created_at}</li>
+                <li>{this.state.currentRepo.owner.login}</li>
+              </ul>
+            </div>
+            : null
+          }
+
+          {
+            this.state.currentReadme ?
+            <div className="readme" dangerouslySetInnerHTML={this.createMarkup()} />
+            : null
+          }
+          </div>
+        </modal>
       </div>
     );
   }
