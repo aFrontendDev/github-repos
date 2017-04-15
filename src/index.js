@@ -12,13 +12,22 @@ import './styles/styles.css';
 
 const Root = () => {
     return(
-        <Router>
-            <Switch>
-                <Route exact path="/" component={SearchGithub} />
-                <Route exact path="/search-github/" component={SearchGithub} />
-                <Route component={SearchGithub} />
-            </Switch>
-        </Router>
+
+        <main className="main" id="main">
+            <div className="layout">
+                <div className="region region--a">
+                    <div className="region-inner">
+                        <Router>
+                            <Switch>
+                                <Route exact path="/" component={SearchGithub} />
+                                <Route exact path="/search-github/" component={SearchGithub} />
+                                <Route component={SearchGithub} />
+                            </Switch>
+                        </Router>
+                    </div>
+                </div>
+            </div>
+        </main>
     )
 }
 

@@ -7,32 +7,41 @@ class SearchResults extends Component {
   render() {
     return (
 
-      <section className="results">
-        <header className="results__header">
-        <h3 className="results__title">Search Results</h3>
-        </header>
-        <div className="results__body">
+      <div>
+
         {
-          this.props.githubData.map(function(repo) {
-          let itemClick = this.props.viewRepoDetail.bind(this, repo);
-          return (
-            <div key={repo.id} className="results__item">
-              <h4>{repo.name}</h4>
-              <a href={repo.url}>
-                {repo.url}
-              </a>
-              <ul>
-                <li>{repo.full_name}</li>
-                <li>{repo.language}</li>
-                <li>{repo.created_at}</li>
-                <li>{repo.owner.login}</li>
-              </ul>
-              <button onClick={itemClick}>View Details</button>
+          this.props.githubData.length > 0 ?
+          <section className="results">
+            <header className="results__header">
+            <h3 className="results__title">Search Results</h3>
+            </header>
+            <div className="results__body">
+            {
+              this.props.githubData.map(function(repo) {
+              let itemClick = this.props.viewRepoDetail.bind(this, repo);
+              return (
+                <div key={repo.id} className="results__item">
+                  <h4>{repo.name}</h4>
+                  <a href={repo.url}>
+                    {repo.url}
+                  </a>
+                  <ul>
+                    <li>{repo.full_name}</li>
+                    <li>{repo.language}</li>
+                    <li>{repo.created_at}</li>
+                    <li>{repo.owner.login}</li>
+                  </ul>
+                  <button onClick={itemClick}>View Details</button>
+                </div>
+              );
+            }, this)}
             </div>
-          );
-        }, this)}
-        </div>
-      </section>
+          </section>
+
+          : null
+        }
+
+      </div>
     );
   }
 }

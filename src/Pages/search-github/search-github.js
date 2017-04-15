@@ -75,6 +75,8 @@ class SearchGithub extends Component {
           currentReadme: markdownHtml,
           modalIn: true
         });
+
+        this.addModalIn();
       })
       .catch((error) => {
         console.log(error);
@@ -84,17 +86,27 @@ class SearchGithub extends Component {
       });
   }
 
+  // find and update html tag with modal-in class
+  addModalIn() {
+    const _Html = document.querySelector('html');
+    _Html.classList.add('modal-in');
+  }
+
   // modal close handler
   handleCloseModal() {
     this.setState({
       modalIn: false
     });
+    const _Html = document.querySelector('html');
+    _Html.classList.remove('modal-in');
   }
 
   render() {
     return (
-      <div>
-        <h2>Search Github Repo's</h2>
+      <section className="search block block--size-a">
+        <header className="search__header">
+          <h2 className="search__title">Search Github Repo's</h2>
+        </header>
 
         <SearchForm
           getRepoData={this.getRepoData}
@@ -111,7 +123,7 @@ class SearchGithub extends Component {
           currentRepo={this.state.currentRepo}
           currentReadme={this.state.currentReadme}
         />
-      </div>
+      </section>
     );
   }
 }
