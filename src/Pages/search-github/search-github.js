@@ -6,6 +6,7 @@ import '../search-github/search-github.css';
 
 import SearchForm from "../../Components/search-form/search-form";
 import SearchResults from "../../Components/search-results/search-results";
+import SearchNoResults from "../../Components/search-no-results/search-no-results";
 import RepoModal from "../../Components/repo-modal/repo-modal";
 
 class SearchGithub extends Component {
@@ -17,7 +18,9 @@ class SearchGithub extends Component {
       currentReadme: '',
       currentRepo: null,
       modalIn: false,
-      numberOfResults: 0
+      numberOfResults: 0,
+      loading: false,
+      getReposError: false
     };
 
     this.modalIn = this.modalIn.bind(this);
@@ -26,10 +29,15 @@ class SearchGithub extends Component {
     this.modalHide = this.modalHide.bind(this);
     this.getRepoData = this.getRepoData.bind(this);
     this.viewRepoDetail = this.viewRepoDetail.bind(this);
+    this.loadingIn = this.loadingIn.bind(this);
+    this.loadingOut = this.loadingOut.bind(this);
   }
 
   // use state data to query github api and update state data to update view
   getRepoData(search) {
+
+    this.loadingIn();
+
     axios
       .get(`https://api.github.com/search/repositories?q=${search}+in:name`)
       .then(res => {
@@ -41,14 +49,40 @@ class SearchGithub extends Component {
           numberOfResults: numberOfResults
         });
 
+        if (numberOfResults < 1) {
+          this.getReposError();
+        } else {
+          this.resetReposError();
+        }
+
+        this.loadingOut();
       })
       .catch((error) => {
         console.log(error);
+        this.loadingOut();
+        this.getReposError();
       });
+  }
+
+  // set the error state so that we can show the no-results view
+  getReposError() {
+
+    this.setState({
+      getReposError: true
+    });
+  }
+
+  resetReposError() {
+
+    this.setState({
+      getReposError: false
+    });
   }
 
   // get more detail on repo
   viewRepoDetail (repo) {
+    this.loadingIn();
+
     this.setState({
       currentRepo: repo
     });
@@ -62,6 +96,7 @@ class SearchGithub extends Component {
       .catch((error) => {
         console.log(error);
         this.modalIn();
+        this.loadingOut();
       });
   }
 
@@ -80,10 +115,12 @@ class SearchGithub extends Component {
         });
 
         this.modalIn();
+        this.loadingOut();
       })
       .catch((error) => {
         console.log(error);
         this.modalIn();
+        this.loadingOut();
       });
   }
 
@@ -127,9 +164,22 @@ class SearchGithub extends Component {
     _Body.removeEventListener('transitionend', this.modalHide);
   }
 
+  loadingIn() {
+    this.setState({
+      loading: true
+    });
+  }
+
+  loadingOut() {
+    this.setState({
+      loading: false
+    });
+  }
+
   render() {
     return (
-      <section className="search block block--size-a">
+      <section className={"search block block--size-a " + (this.state.loading ? 'loading' : '')}>
+        <span className="spinner"></span>
         <header className="search__header">
           <h2 className="search__title">Search Github Repos</h2>
         </header>
@@ -150,6 +200,12 @@ class SearchGithub extends Component {
           currentRepo={this.state.currentRepo}
           currentReadme={this.state.currentReadme}
         />
+
+        {
+          this.state.getReposError ?
+          <SearchNoResults />
+          : null
+        }
       </section>
     );
   }

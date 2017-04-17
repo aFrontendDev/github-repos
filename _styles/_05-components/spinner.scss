@@ -1,0 +1,31 @@
+// spinner
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    position: fixed;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    margin-left: -30px;
+    margin-top: -30px;
+    border-radius: 50%;
+    border-top: $vr solid rgba(0, 0, 0, 0.2);
+    border-right: $vr solid rgba(0, 0, 0, 0.2);
+    border-bottom: $vr solid rgba(0, 0, 0, 0.2);
+    border-left: $vr solid $brand-color-c;
+    display: block;
+    transform: translateZ(0);
+    animation: spin 1.1s infinite linear;
+    opacity: 0;
+    transition: opacity 300ms ease;
+}
