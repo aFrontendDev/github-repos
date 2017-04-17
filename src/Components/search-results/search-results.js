@@ -5,6 +5,8 @@ import '../../Components/search-results/search-results.css';
 class SearchResults extends Component {
 
   render() {
+    const plural = this.props.numberOfResults > 1 ? true : false;
+    let resultText = plural ? 'results found' : 'result found';
     return (
 
       <div>
@@ -13,28 +15,44 @@ class SearchResults extends Component {
           this.props.githubData.length > 0 ?
           <section className="results">
             <header className="results__header">
-            <h3 className="results__title">Search Results</h3>
-            </header>
+              <h3 className="results__title">Search Results</h3>
+              <p className="results__amount">
+                {
+                  `${this.props.numberOfResults} ${resultText}`
+                }
+              </p>
+              </header>
             <div className="results__body">
             {
               this.props.githubData.map(function(repo) {
-              let itemClick = this.props.viewRepoDetail.bind(this, repo);
-              return (
-                <div key={repo.id} className="results__item">
-                  <h4>{repo.name}</h4>
-                  <a href={repo.url}>
-                    {repo.url}
-                  </a>
-                  <ul>
-                    <li>{repo.full_name}</li>
-                    <li>{repo.language}</li>
-                    <li>{repo.created_at}</li>
-                    <li>{repo.owner.login}</li>
-                  </ul>
-                  <button onClick={itemClick}>View Details</button>
-                </div>
-              );
-            }, this)}
+                let itemClick = this.props.viewRepoDetail.bind(this, repo);
+                const created = repo.created_at.substring(0, repo.created_at.indexOf('T'));
+
+                return (
+                  <result key={repo.id} className="result result--style-a" onClick={itemClick}>
+                    <div className="result__inner">
+                      <h4 className="result__title">{repo.name}</h4>
+                      <div className="result__body">
+                        <div className="result__detail">
+                          {
+                            repo.description ?
+                            <p className="result__description">{repo.description}</p>
+                            : null
+                          }
+                          <ul>
+                            <li><strong>Owner</strong>: {repo.owner.login}</li>
+                            <li><strong>Created</strong>: {created}</li>
+                          </ul>
+                        </div>
+                        <figure className="result__avatar">
+                          <img src={repo.owner.avatar_url} alt="user avatar" />
+                        </figure>
+                      </div>
+                    </div>
+                  </result>
+                );
+              }, this)
+            }
             </div>
           </section>
 
@@ -48,7 +66,8 @@ class SearchResults extends Component {
 
 SearchResults.propTypes = {
     githubData: React.PropTypes.array.isRequired,
-    viewRepoDetail: React.PropTypes.func.isRequired
+    viewRepoDetail: React.PropTypes.func.isRequired,
+    numberOfResults: React.PropTypes.number.isRequired
 }
 
 export default SearchResults;

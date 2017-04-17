@@ -16,10 +16,14 @@ class SearchGithub extends Component {
       githubData: [],
       currentReadme: '',
       currentRepo: null,
-      modalIn: false
+      modalIn: false,
+      numberOfResults: 0
     };
 
-    this.handleCloseModal = this.handleCloseModal.bind(this);
+    this.modalIn = this.modalIn.bind(this);
+    this.modalOut = this.modalOut.bind(this);
+    this.modalShow = this.modalShow.bind(this);
+    this.modalHide = this.modalHide.bind(this);
     this.getRepoData = this.getRepoData.bind(this);
     this.viewRepoDetail = this.viewRepoDetail.bind(this);
   }
@@ -30,9 +34,11 @@ class SearchGithub extends Component {
       .get(`https://api.github.com/search/repositories?q=${search}+in:name`)
       .then(res => {
         const data = res.data.items;
+        const numberOfResults = res.data.items.length;
 
         this.setState({
-          githubData: data
+          githubData: data,
+          numberOfResults: numberOfResults
         });
 
       })
@@ -55,9 +61,7 @@ class SearchGithub extends Component {
       })
       .catch((error) => {
         console.log(error);
-        this.setState({
-          modalIn: true
-        });
+        this.modalIn();
       });
   }
 
@@ -72,33 +76,55 @@ class SearchGithub extends Component {
         const markdownHtml = converter.makeHtml(res.data);
 
         this.setState({
-          currentReadme: markdownHtml,
-          modalIn: true
+          currentReadme: markdownHtml
         });
 
-        this.addModalIn();
+        this.modalIn();
       })
       .catch((error) => {
         console.log(error);
-        this.setState({
-          modalIn: true
-        });
+        this.modalIn();
       });
   }
 
   // find and update html tag with modal-in class
-  addModalIn() {
+  modalIn() {
+    this.setState({
+      modalIn: true
+    });
     const _Html = document.querySelector('html');
+    const _Body = document.querySelector('body');
     _Html.classList.add('modal-in');
+
+    _Body.addEventListener('transitionend', this.modalShow);
+  }
+
+  modalShow() {
+    const _Body = document.querySelector('body');
+    const _Html = document.querySelector('html');
+    _Html.classList.add('modal-show');
+
+    _Body.removeEventListener('transitionend', this.modalShow);
   }
 
   // modal close handler
-  handleCloseModal() {
+  modalOut() {
     this.setState({
       modalIn: false
     });
     const _Html = document.querySelector('html');
+    const _Body = document.querySelector('body');
+    _Html.classList.remove('modal-show');
+
+    _Body.addEventListener('transitionend', this.modalHide);
+  }
+
+  modalHide() {
+    const _Body = document.querySelector('body');
+    const _Html = document.querySelector('html');
     _Html.classList.remove('modal-in');
+    
+    _Body.removeEventListener('transitionend', this.modalHide);
   }
 
   render() {
@@ -115,11 +141,12 @@ class SearchGithub extends Component {
         <SearchResults
           githubData={this.state.githubData}
           viewRepoDetail={this.viewRepoDetail}
+          numberOfResults={this.state.numberOfResults}
         />
 
         <RepoModal
           modalIn={this.state.modalIn}
-          handleCloseModal={this.handleCloseModal}
+          modalOut={this.modalOut}
           currentRepo={this.state.currentRepo}
           currentReadme={this.state.currentReadme}
         />

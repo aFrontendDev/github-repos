@@ -1,0 +1,112 @@
+// result
+
+.result {
+    position: relative;
+    display: block;
+    width: 100%;
+
+    &.result--style-a {
+        padding: $vr*2 $ggw;
+        border: solid 1px $brand-color-a;
+        cursor: pointer;
+        margin-bottom: $vr*3;
+
+        &:after {
+            content: 'VIEW MORE';
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0,0,0,0.5);
+            color: $brand-white;
+            opacity: 0;
+            font-weight: 700;
+            font-size: 21px;
+            transition: opacity 300ms, font-size 500ms ease-in-out;
+        }
+
+        &:hover {
+
+            &:after {
+                opacity: 1;
+                font-size: 24px;
+            }
+
+            .result__inner {
+                transform: scale(0.99);
+            }
+        }
+    }
+}
+
+.result__inner {
+
+    .result--style-a & {
+        transition: transform 700ms ease-in-out;
+    }
+}
+
+.result__title {
+    padding-bottom: $vr;
+    margin-bottom: $vr*3;
+    border-bottom: dotted 1px $brand-color-a;
+    color: $brand-color-a;
+
+    a {
+        color: $brand-color-a;
+        transition: color 300ms ease-in-out;
+
+        &:hover {
+            color: darken($brand-color-a, 10%);
+        }
+    }
+}
+
+.result__body {
+
+    @media #{$BPC} {
+        display: flex;
+    }
+
+    .result--style-a & {
+
+        @media #{$BPC} {
+            align-items: center;
+        }
+    }
+
+    .result--style-b & {
+        padding: 0 $ggw/2;
+
+        @media #{$BPC} {
+            align-items: flex-start;
+        }
+    }
+}
+
+.result__description {
+    font-family: $font-family-serif;
+    font-style: italic;
+}
+
+.result__avatar {
+    width: 50px;
+
+    @media #{$BPC} {
+        margin-left: auto;
+    }
+
+    img {
+        width: 100%;
+    }
+}
+
+.result__readme-title {
+    @extend .title--style-d;
+    display: inline-block;
+    border-bottom: solid 1px;
+}
