@@ -14,6 +14,9 @@ const Root = () => {
     return(
 
         <main className="main" id="main">
+            <header class="header" id="header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
+                <h1 className="visually-hidden" itemscope itemtype="http://schema.org/WPHeader">Github Repos Search</h1>
+            </header>
             <div className="layout">
                 <div className="region region--a">
                     <div className="region-inner">
