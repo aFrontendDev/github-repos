@@ -131,7 +131,7 @@ class SearchGithub extends Component {
     return (
       <section className="search block block--size-a">
         <header className="search__header">
-          <h2 className="search__title">Search Github Repo's</h2>
+          <h2 className="search__title">Search Github Repos</h2>
         </header>
 
         <SearchForm

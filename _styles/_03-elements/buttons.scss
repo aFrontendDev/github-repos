@@ -145,7 +145,6 @@ button::-moz-focus-inner {
 	}
 }
 
-
 .btn--style-a {
 	background-color: $brand-color-a;
 	border-color: $brand-color-a;
@@ -191,5 +190,18 @@ button::-moz-focus-inner {
 	&:focus {
 		background: lighten($brand-color-d, 10%);
 		border-color: lighten($brand-color-d, 10%);
+	}
+}
+
+.btn--unstyled {
+	background-color: transparent;
+	padding: 0;
+	border: none;
+	min-height: 0;
+
+	&:hover,
+	&:focus {
+		background-color: transparent;
+		border: none;
 	}
 }

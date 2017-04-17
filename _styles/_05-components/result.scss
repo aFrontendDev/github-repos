@@ -64,6 +64,10 @@
             color: darken($brand-color-a, 10%);
         }
     }
+
+    .result--style-b & {
+        padding-right: 30px;
+    }
 }
 
 .result__body {
@@ -80,9 +84,11 @@
     }
 
     .result--style-b & {
-        padding: 0 $ggw/2;
+        margin-bottom: $vr*2;
 
         @media #{$BPC} {
+            margin-bottom: 0;
+            padding: 0 $ggw/2;
             align-items: flex-start;
         }
     }
@@ -91,6 +97,13 @@
 .result__description {
     font-family: $font-family-serif;
     font-style: italic;
+}
+
+.result__detail {
+
+    .result--style-b & {
+        margin-bottom: $vr*2;
+    }
 }
 
 .result__avatar {

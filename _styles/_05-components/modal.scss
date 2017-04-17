@@ -4,9 +4,9 @@
     position: fixed;
     top: $vr*3;
     bottom: $vr*3;
-    left: $ggw*2;
-    right: $ggw*2;
-    padding: $vr*3 $ggw*2;
+    left: $ggw/2;
+    right: $ggw/2;
+    padding: $vr*3 $ggw/2;
     border: 1px solid $brand-black;
     opacity: 0;
     transform: scale(0);
@@ -14,6 +14,12 @@
     background-color: $brand-white;
     overflow: hidden;
     z-index: 2;
+    
+    @media #{$BPC} {
+        left: $ggw*2;
+        right: $ggw*2;
+        padding: $vr*3 $ggw*2;
+    }
 
     &.modal--in {
         opacity: 1;
@@ -39,6 +45,7 @@
     display: inline-block;
     overflow: hidden;
     cursor: pointer;
+    z-index: 2;
 
     svg {
         width: 100%;

@@ -20,9 +20,9 @@
 
 // Primary Palette
 $brand-color-a: #3d8cd2;
-$brand-color-b: #00A650;
-$brand-color-c: #2056AE;
-$brand-color-d: #FABC09;
+$brand-color-b: #FFD03C;
+$brand-color-c: #FF793C;
+$brand-color-d: #0959A0;
 
 // Secondary Palette
 $brand-color-e: #434041;
@@ -65,7 +65,7 @@ $icon-font: 'icomoon';
 // Font Sizing
 $font-size-base: 16px;
 $font-size-small: 14px;
-$line-height-base: $vr*4; // 24px
+$line-height-base: $vr*3; // 18px
 $line-height-small: $vr*3; // 18px
 
 $font-weight-bold: 700; // 700 when not using $font-face

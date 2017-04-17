@@ -1,0 +1,26 @@
+// results
+
+.results {
+
+}
+
+.results__header {
+    margin-bottom: $vr*2;
+
+    @media #{$BPD} {
+        margin-bottom: $vr*5;
+    }
+}
+
+.results__title {
+    @extend .title--style-c;
+    color: $brand-color-d;
+}
+
+.results__amount {
+    color: $brand-color-a;
+}
+
+.results__body {
+
+}
